@@ -1,6 +1,6 @@
 {
   "name": "ngx-lightbox-evp",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "A port >= angular5 for lightbox2",
   "main": "index.js",
   "dependencies": {},

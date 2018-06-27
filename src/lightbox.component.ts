@@ -15,7 +15,7 @@ import { LightboxEvent, LIGHTBOX_EVENT, IAlbum, IEvent, LightboxWindowRef } from
 
 @Component( {
   template: `
-    <div class="lb-controlContainer animation fadeIn" [hidden]="ui.showReloader" #dataContainer>
+    <div class="lb-controlContainer animation fadeIn" #dataContainer>
       <div class="lb-number" [hidden]="!ui.showPageNumber" #number>
         {{ content.pageNumber }}
       </div>
@@ -145,7 +145,7 @@ export class LightboxComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public close( $event: any ): void {
     $event.stopPropagation();
-    if ( $event.target.classList.contains( 'closeContainer' ) ) {
+    if ( $event.target.classList.contains( 'lb-closeContainer' ) ) {
       this._lightboxEvent.broadcastLightboxEvent( { id: LIGHTBOX_EVENT.CLOSE, data: null } );
     }
   }
@@ -426,10 +426,6 @@ export class LightboxComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private _hideImage(): void {
     this.ui.showReloader = true;
-    this.ui.showArrowNav = false;
-    this.ui.showLeftArrow = false;
-    this.ui.showRightArrow = false;
-    this.ui.showPageNumber = false;
     this.ui.showCaption = false;
   }
 
