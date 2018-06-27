@@ -25,12 +25,10 @@ import { LightboxEvent, LIGHTBOX_EVENT, IAlbum, IEvent, LightboxWindowRef } from
     <div class="lb-outerContainer transition" #outerContainer>
       <div class="lb-container" #container>
         <img class="lb-image animation fadeIn" [src]="album[currentImageIndex].src" [hidden]="ui.showReloader" #image>
-        
         <div class="lb-nav" [hidden]="!ui.showArrowNav" #navArrow>
           <a class="lb-prev" [hidden]="!ui.showLeftArrow" (click)="prevImage()" #leftArrow></a>
           <a class="lb-next" [hidden]="!ui.showRightArrow" (click)="nextImage()" #rightArrow></a>
         </div>
-        
         <div class="lb-loader" [hidden]="!ui.showReloader" (click)="close($event)"></div>
       </div>
       <div class="lb-details">
