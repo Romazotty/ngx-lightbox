@@ -25,13 +25,13 @@ import { LightboxEvent, LIGHTBOX_EVENT, IAlbum, IEvent, LightboxWindowRef } from
     <div class="lb-outerContainer transition" #outerContainer>
       <div class="lb-container" #container>
         <img class="lb-image animation fadeIn" [src]="album[currentImageIndex].src" [hidden]="ui.showReloader" #image>
+        
         <div class="lb-nav" [hidden]="!ui.showArrowNav" #navArrow>
           <a class="lb-prev" [hidden]="!ui.showLeftArrow" (click)="prevImage()" #leftArrow></a>
           <a class="lb-next" [hidden]="!ui.showRightArrow" (click)="nextImage()" #rightArrow></a>
         </div>
-        <div class="lb-loader" [hidden]="!ui.showReloader" (click)="close($event)">
-          <a class="lb-cancel"></a>
-        </div>
+        
+        <div class="lb-loader" [hidden]="!ui.showReloader" (click)="close($event)"></div>
       </div>
       <div class="lb-details">
           <span class="lb-caption animation fadeIn" [hidden]="!ui.showCaption" [innerHtml]="album[currentImageIndex].caption" #caption>
@@ -147,9 +147,7 @@ export class LightboxComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public close( $event: any ): void {
     $event.stopPropagation();
-    if ( $event.target.classList.contains( 'lightbox' ) ||
-      $event.target.classList.contains( 'lb-loader' ) ||
-      $event.target.classList.contains( 'lb-close' ) ) {
+    if ( $event.target.classList.contains( 'closeContainer' ) ) {
       this._lightboxEvent.broadcastLightboxEvent( { id: LIGHTBOX_EVENT.CLOSE, data: null } );
     }
   }
