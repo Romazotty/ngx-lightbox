@@ -23,7 +23,7 @@ import { LightboxEvent, LIGHTBOX_EVENT, IAlbum, IEvent, LightboxWindowRef } from
       <div class="lb-button lb-zoomContainer" (click)="zoom($event)"></div>
     </div>
     <div class="lb-outerContainer transition" #outerContainer>
-      <div class="lb-container" #container>
+      <div class="lb-container" #container (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
         <img class="lb-image animation fadeIn" [src]="album[currentImageIndex].src" [hidden]="ui.showReloader" #image>
         <div class="lb-nav" [hidden]="!ui.showArrowNav" #navArrow>
           <a class="lb-prev" [hidden]="!ui.showLeftArrow" (click)="prevImage()" #leftArrow></a>
@@ -61,6 +61,9 @@ export class LightboxComponent implements AfterViewInit, OnDestroy, OnInit {
   private _cssValue: any;
   private _event: any;
   private _windowRef: any;
+
+  private swipeCoord?: [ number, number ];
+  private swipeTime?: number;
 
   constructor( private _elemRef: ElementRef,
                private _rendererRef: Renderer,
@@ -141,6 +144,40 @@ export class LightboxComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     this._event.subscription.unsubscribe();
+  }
+
+  swipe( e: TouchEvent, when: string ): void {
+    const coord: [ number, number ] = [ e.changedTouches[ 0 ].pageX, e.changedTouches[ 0 ].pageY ];
+    const time = new Date().getTime();
+
+    if ( when === 'start' ) {
+      this.swipeCoord = coord;
+      this.swipeTime = time;
+    }
+    else if ( when === 'end' ) {
+      const direction = [ coord[ 0 ] - this.swipeCoord[ 0 ], coord[ 1 ] - this.swipeCoord[ 1 ] ];
+      const duration = time - this.swipeTime;
+
+      console.log(direction)
+
+      // if ( duration < 1000 && Math.abs( direction[ 0 ] ) > 30
+      //   && Math.abs( direction[ 0 ] ) > Math.abs( direction[ 1 ] * 3 ) ) {
+      //
+      //   const swipe = direction[ 0 ] < 0 ? 'next' : 'previous';
+      //   console.log(swipe)
+      //   //Do whatever you want with swipe
+      // }
+
+      if ( duration < 1000 && Math.abs( direction[ 0 ] ) <= Math.abs( direction[ 1 ] * 3 ) ) {
+
+        const swipe = direction[ 1 ] < 0 ? 'top' : 'bottom';
+        console.log(swipe)
+
+        if(direction[ 1 ] < 0){
+          this._lightboxEvent.broadcastLightboxEvent( { id: LIGHTBOX_EVENT.CLOSE, data: null } );
+        }
+      }
+    }
   }
 
   public close( $event: any ): void {
